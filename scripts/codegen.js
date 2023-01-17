@@ -6,7 +6,11 @@ const contracts = [
   {
     name: 'HackCw20',
     dir: join(contractsDir, 'cw20-base')
-  }
+  },
+  {
+    name: 'Lotto',
+    dir: join(contractsDir, 'cw-lotto')
+  },
 ];
 
 codegen({
