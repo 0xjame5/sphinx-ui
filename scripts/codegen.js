@@ -8,7 +8,7 @@ const contracts = [
     dir: join(contractsDir, 'cw20-base')
   },
   {
-    name: 'Lotto',
+    name: 'CwLotto',
     dir: join(contractsDir, 'cw-lotto')
   },
 ];
