@@ -27,17 +27,6 @@ import {
 } from "../components";
 import { useHackCw20Balance } from "../hooks/use-hack-cw20-balance";
 
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-} from '@chakra-ui/react';
-
 import { useRouter } from 'next/router'
 
 export default function Home() {
