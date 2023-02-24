@@ -8,6 +8,7 @@ import {
   Stack,
   useColorModeValue,
   Text,
+  Heading,
 } from '@chakra-ui/react';
 import { MouseEventHandler, useEffect } from 'react';
 import { FiAlertTriangle } from 'react-icons/fi';
@@ -122,16 +123,15 @@ export const WalletSection = () => {
         templateColumns="1fr"
         rowGap={4}
         alignItems="center"
-        justifyContent="center"
-      >
-        {currentChainName && (
-          <GridItem marginBottom={'20px'}>
-            <ChainCard
-              prettyName={chain?.label || currentChainName}
-              icon={chain?.icon}
-            />
-          </GridItem>
-        )}
+        justifyContent="center">
+
+        <GridItem px={6}>
+          <Stack>x
+            <Heading as='h2' size='4xl' noOfLines={1}>
+              {currentChainName}
+            </Heading>
+          </Stack>
+        </GridItem>
         <GridItem px={6}>
           <Stack
             justifyContent="center"
