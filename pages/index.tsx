@@ -42,11 +42,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/*<Routes>*/}
-      {/*  */}
-      {/*</Routes>*/}
 
-    
       <Grid templateColumns='repeat(5, 1fr)' gap={4}>
         <GridItem colSpan={2} h='10'>
           <Heading as='h2' noOfLines={1}>CW-Lotto</Heading>
