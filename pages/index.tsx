@@ -33,7 +33,7 @@ export default function Home() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { walletStatus } = useWallet();
   const { balance } = useHackCw20Balance(cw20ContractAddress);
-
+  const router = useRouter();
   return (
     <Container maxW="5xl" py={10}>
       <Head>
@@ -43,24 +43,6 @@ export default function Home() {
       </Head>
 
 
-      <Grid templateColumns='repeat(5, 1fr)' gap={4}>
-        <GridItem colSpan={2} h='10'>
-          <Heading as='h2' noOfLines={1}>CW-Lotto</Heading>
-        </GridItem>
-        <GridItem colStart={4} colEnd={6} h='10'>
-        <Stack direction='row-reverse' spacing={4}>
-          <Button colorScheme='teal' variant='ghost'>
-            Active Lottos
-          </Button>
-          <Button colorScheme='teal' variant='link'>
-            Archive Lottos
-          </Button>
-        </Stack>
-        </GridItem>
-        
-      </Grid>
-
-      <WalletSection />
 
     </Container>
   );
