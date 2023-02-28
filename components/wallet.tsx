@@ -8,7 +8,7 @@ import {
     Stack,
     useColorModeValue,
     Text,
-    Heading,
+    Heading, HStack,
 } from '@chakra-ui/react';
 import {MouseEventHandler, useEffect} from 'react';
 import {FiAlertTriangle} from 'react-icons/fi';
@@ -27,7 +27,7 @@ import {
     WalletConnectComponent,
     ChainCard,
 } from '../components';
-import {chainName} from '../config';
+import {chainName, STAKINGDENOM} from '../config';
 
 export const WalletSection = () => {
     const walletManager = useWallet();
@@ -114,15 +114,24 @@ export const WalletSection = () => {
         />
     );
 
+    const balances = address && currentWallet?.isWalletConnected && (
+        walletManager.getStargateClient().then(x => {
+            x?.getBalance(address as string, STAKINGDENOM).then(res => {
+                console.log(res)
+            });
+        }));
+
+
     return (
         <Box>
-            {/* TODO: GET JUNO BALANCE */}
-            {/*{userInfo}*/}
-            {/*{addressBtn}*/}
-            <Box w="full" maxW={{base: 52, md: 64}}>
-                {connectWalletButton}
-            </Box>
-            {connectWalletWarn && <GridItem>{connectWalletWarn}</GridItem>}
+            <HStack>
+                <Box w="full" maxW={{base: 52, md: 64}}>
+                    {connectWalletButton}
+                </Box>
+                {connectWalletWarn && <GridItem>{connectWalletWarn}</GridItem>}
+                {addressBtn}
+
+            </HStack>
         </Box>
     );
 };

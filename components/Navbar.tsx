@@ -1,11 +1,9 @@
-import {Box, Flex, HStack, IconButton, Link, useColorModeValue, useDisclosure,} from '@chakra-ui/react';
-import {CloseIcon, HamburgerIcon,} from '@chakra-ui/icons';
+import {Box, Flex, HStack, Link, useColorModeValue, useDisclosure,} from '@chakra-ui/react';
 import {ReactNode} from "react";
 import {WalletSection} from "./wallet";
 
 
 export default function Navbar() {
-    const {isOpen, onToggle} = useDisclosure();
     return (
         <Box>
             <Flex
@@ -33,7 +31,6 @@ export default function Navbar() {
         </Box>
     );
 }
-
 
 const Links = ['Dashboard', 'Projects', 'Team'];
 
