@@ -2,9 +2,6 @@ import {useState, useEffect} from "react";
 import {useWallet} from "@cosmos-kit/react";
 import {STAKINGDENOM} from "../config";
 
-// import cosmwasm client generated with cosmwasm-ts-codegen
-// import { HackCw20QueryClient } from "../codegen/HackCw20.client";
-
 export function useNativeBalance(): {
     balance: string | undefined;
 } {

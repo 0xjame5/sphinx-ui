@@ -125,7 +125,6 @@ export const WalletSection = () => {
 
     console.log(balance);
 
-
     return (
         <Box>
             <HStack>
