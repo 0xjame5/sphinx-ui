@@ -8,9 +8,9 @@ import {
     Stack,
     useColorModeValue,
     Text,
-    Heading, HStack,
+    Heading, HStack, Button,
 } from '@chakra-ui/react';
-import {MouseEventHandler, useEffect} from 'react';
+import {MouseEventHandler, useEffect, useState} from 'react';
 import {FiAlertTriangle} from 'react-icons/fi';
 import {
     Error,
@@ -28,6 +28,8 @@ import {
     ChainCard,
 } from '../components';
 import {chainName, STAKINGDENOM} from '../config';
+import { Coin } from 'interchain/types/codegen/cosmos/base/v1beta1/coin';
+import {useNativeBalance} from "../hooks/use-native-balance";
 
 export const WalletSection = () => {
     const walletManager = useWallet();
@@ -43,7 +45,10 @@ export const WalletSection = () => {
         currentChainRecord,
         getChainLogo,
         setCurrentChain,
+        getStargateClient,
     } = walletManager;
+
+    const { balance } = useNativeBalance();
 
     useEffect(() => {
         setCurrentChain(chainName);
@@ -114,23 +119,22 @@ export const WalletSection = () => {
         />
     );
 
-    const balances = address && currentWallet?.isWalletConnected && (
-        walletManager.getStargateClient().then(x => {
-            x?.getBalance(address as string, STAKINGDENOM).then(res => {
-                console.log(res)
-            });
-        }));
+    const balanceDisplay = balance && (<Box>
+        <Button> {balance} uJUNOX </Button>
+    </Box>);
+
+    console.log(balance);
 
 
     return (
         <Box>
             <HStack>
-                <Box w="full" maxW={{base: 52, md: 64}}>
+                <Box>
                     {connectWalletButton}
                 </Box>
                 {connectWalletWarn && <GridItem>{connectWalletWarn}</GridItem>}
                 {addressBtn}
-
+                {balanceDisplay}
             </HStack>
         </Box>
     );
