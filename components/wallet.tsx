@@ -1,19 +1,8 @@
 import {useWallet} from '@cosmos-kit/react';
-import {
-    Box,
-    Center,
-    Grid,
-    GridItem,
-    Icon,
-    Stack,
-    useColorModeValue,
-    Text,
-    Heading, HStack, Button,
-} from '@chakra-ui/react';
-import {MouseEventHandler, useEffect, useState} from 'react';
+import {Box, Button, GridItem, HStack, Icon,} from '@chakra-ui/react';
+import {MouseEventHandler, useEffect} from 'react';
 import {FiAlertTriangle} from 'react-icons/fi';
 import {
-    Error,
     Connected,
     ConnectedShowAddress,
     ConnectedUserInfo,
@@ -21,14 +10,13 @@ import {
     ConnectStatusWarn,
     CopyAddressBtn,
     Disconnected,
+    Error,
     NotExist,
     Rejected,
     RejectedWarn,
     WalletConnectComponent,
-    ChainCard,
 } from '../components';
-import {chainName, STAKINGDENOM} from '../config';
-import { Coin } from 'interchain/types/codegen/cosmos/base/v1beta1/coin';
+import {chainName} from '../config';
 import {useNativeBalance} from "../hooks/use-native-balance";
 
 export const WalletSection = () => {

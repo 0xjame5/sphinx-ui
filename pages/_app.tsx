@@ -15,39 +15,38 @@ import {Chain} from '@chain-registry/types';
 import Navbar from "../components/Navbar";
 
 
-function CreateCosmosApp({ Component, pageProps }: AppProps) {
-  const signerOptions: SignerOptions = {
-    signingStargate: (_chain: Chain) => {
-      return getSigningCosmosClientOptions();
-    },
-    signingCosmwasm: (chain: Chain) => {
-      switch (chain.chain_name) {
-        case 'cosmwasmtestnet':
-          return {
-            gasPrice: GasPrice.fromString('0.0025umlga'),
-          };
-      }
-    },
-  };
+function CreateCosmosApp({Component, pageProps}: AppProps) {
+    const signerOptions: SignerOptions = {
+        signingStargate: (_chain: Chain) => {
+            return getSigningCosmosClientOptions();
+        },
+        signingCosmwasm: (chain: Chain) => {
+            switch (chain.chain_name) {
+                case 'cosmwasmtestnet':
+                    return {
+                        gasPrice: GasPrice.fromString('0.0025umlga'),
+                    };
+            }
+        },
+    };
 
-  return (
-    <ChakraProvider theme={defaultTheme}>
-      <WalletProvider
-        chains={chains}
-        assetLists={assets}
-        wallets={[...keplrWallets, ...cosmostationWallets, ...leapWallets]}
-        signerOptions={signerOptions}
-        endpointOptions={{
-          cosmwasmtestnet: {
-            rpc: ['https://rpc.malaga-420.cosmwasm.com/'],
-          },
-        }}
-      >
-          <Navbar/>
-        <Component {...pageProps} />
-      </WalletProvider>
-    </ChakraProvider>
-  );
+    return (
+        <ChakraProvider theme={defaultTheme}>
+            <WalletProvider
+                chains={chains}
+                assetLists={assets}
+                wallets={[...keplrWallets, ...cosmostationWallets, ...leapWallets]}
+                signerOptions={signerOptions}
+                endpointOptions={{
+                    cosmwasmtestnet: {
+                        rpc: ['https://rpc.malaga-420.cosmwasm.com/'],
+                    },
+                }}>
+                <Navbar/>
+                <Component {...pageProps} />
+            </WalletProvider>
+        </ChakraProvider>
+    );
 }
 
 export default CreateCosmosApp;
