@@ -3,12 +3,14 @@ import {Container, useColorMode,} from "@chakra-ui/react";
 
 import {useWallet} from "@cosmos-kit/react";
 
+import {cw20ContractAddress} from "../config";
+import {WalletSection,} from "../components";
+import {useHackCw20Balance} from "../hooks/use-hack-cw20-balance";
+
 import {useRouter} from 'next/router'
 
-export default function Home() {
-  const { colorMode, toggleColorMode } = useColorMode();
+export default function Gamble() {
   const { walletStatus } = useWallet();
-
   const router = useRouter();
   return (
     <Container maxW="5xl" py={10}>
@@ -18,6 +20,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+
+      <WalletSection />
 
     </Container>
   );
