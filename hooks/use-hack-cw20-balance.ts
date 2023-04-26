@@ -18,7 +18,6 @@ export function useHackCw20Balance(contractAddress: string): {
         console.error("cosmwasmClient undefined or address undefined.");
         return;
       }
-
       setCw20Client(new HackCw20QueryClient(cosmwasmClient, contractAddress));
     });
   }, [address, contractAddress, getSigningCosmWasmClient]);
@@ -31,4 +30,3 @@ export function useHackCw20Balance(contractAddress: string): {
 
   return { balance: cw20Bal ?? undefined };
 }
-

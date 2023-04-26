@@ -3,10 +3,10 @@ import { AssetList, Asset } from '@chain-registry/types';
 
 export const chainName = 'junotestnet';
 export const STAKINGDENOM = 'ujunox';
-export const feeDenom = 'uand';
+export const feeDenom = 'ujunox';
 
 export const cw20ContractAddress = 'wasm1p7vmrhl3s0fyl0m9hk2hlm7uuxq84hztur63n8ryh85chh30vt6q89shcv'
-
+export const cwlottoContractAddress = 'wasm1p7vmrhl3s0fyl0m9hk2hlm7uuxq84hztur63n8ryh85chh30vt6q89shcv'
 export const chainassets: AssetList = assets.find(
     (chain) => chain.chain_name === chainName
 ) as AssetList;
