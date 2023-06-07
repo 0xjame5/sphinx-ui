@@ -31,7 +31,8 @@ export default function Navbar() {
     );
 }
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Links = ['Home'];
+
 
 const NavLink = ({children}: { children: ReactNode }) => (
     <Link

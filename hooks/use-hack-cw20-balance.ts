@@ -8,7 +8,6 @@ export function useHackCw20Balance(contractAddress: string): {
   balance: string | undefined;
 } {
   const { getSigningCosmWasmClient, address } = useWallet();
-
   const [cw20Client, setCw20Client] = useState<HackCw20QueryClient | null>(
     null
   );
