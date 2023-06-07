@@ -1,0 +1,11 @@
+{
+  "admin": "juno1gw037d4duftfqe9p5gyurdzduamw00q7tw5tvv",
+  "house_fee": 500,
+  "lottery_duration": {
+    "time": 604800
+  },
+  "ticket_cost": {
+    "amount": "100",
+    "denom": "ujunox"
+  }
+}

@@ -6,8 +6,7 @@ import {useWallet} from "@cosmos-kit/react";
 import {useRouter} from 'next/router'
 
 export default function Home() {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const { walletStatus } = useWallet();
+  // const { walletStatus } = useWallet();
 
   const router = useRouter();
   return (
@@ -18,7 +17,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-
+        HOME-PAGE
+      {/*  TODO: Create a dashboard explaining how the lotto process works. and example screen shots*/}
     </Container>
   );
 }

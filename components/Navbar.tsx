@@ -2,7 +2,6 @@ import {Box, Flex, HStack, Link, useColorModeValue, useDisclosure,} from '@chakr
 import {ReactNode} from "react";
 import {WalletSection} from "./wallet";
 
-
 export default function Navbar() {
     return (
         <Box>
@@ -15,7 +14,7 @@ export default function Navbar() {
                 borderColor={useColorModeValue('gray.200', 'gray.900')}
                 alignItems={'center'} justifyContent={'space-between'}>
                 <HStack alignContent={'center'}>
-                    <Box>Logo</Box>
+                    <Box>Lotto</Box>
                 </HStack>
                 <Flex alignItems={'center'}>
                     <HStack
@@ -32,7 +31,8 @@ export default function Navbar() {
     );
 }
 
-const Links = ['Dashboard', 'Projects', 'Team'];
+const Links = ['Home'];
+
 
 const NavLink = ({children}: { children: ReactNode }) => (
     <Link
