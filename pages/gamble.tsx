@@ -19,9 +19,6 @@ import {useRouter} from 'next/router'
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
 import {ChangeEvent, useEffect, useState} from "react";
 import {CwLottoClient} from "../codegen/CwLotto.client";
-import {GasPrice} from "@cosmjs/stargate";
-import {getSigningCosmosClientOptions, getSigningCosmwasmClient} from "interchain";
-// import {Coin} from "@keplr-wallet/unit";
 
 /*
 * If In progress then make it possible to buy tickets. Define how many inputted tickets enabled
@@ -39,15 +36,9 @@ import {getSigningCosmosClientOptions, getSigningCosmwasmClient} from "interchai
 // -
 export default function Gamble() {
   const router = useRouter();
-
   const [client, setClient] = useState<CwLottoClient | null>(null);
-
   const [inputValue, setInputValue] = useState<any>(null);
-
-
   const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
-
-  // console.log(chain.chain_id);
 
   const lottoState = useCwLottoState(CW_LOTTO_ADDRESS);
 
@@ -59,8 +50,6 @@ export default function Gamble() {
       console.log(resp)
     }));
   }, [address, getRestEndpoint, getRpcEndpoint]);
-
-
 
   useEffect(() => {
     if (!address) {
@@ -81,10 +70,11 @@ export default function Gamble() {
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value);
 
   const handleButtonClick =   async () => {
+    let buyTicket = await client?.buyTicket({numTickets: 1}, null, null, );
 
-    let buyTicket = await client?.buyTicket({numTickets: 1} );
-
-    // console.log(buyTicket.logs);
+    let fee: Coin = {
+      amount: "1000", denom: STAKINGDENOM,
+    };
     // Perform further actions with the input value
   };
 
@@ -99,9 +89,7 @@ export default function Gamble() {
 
       // render components that can then be executable.
 
-      let fee: Coin = {
-        amount: "1000", denom: STAKINGDENOM,
-      };
+
       let expiration = openState.expiration;
 
       if ('at_time' in expiration) {
@@ -112,7 +100,6 @@ export default function Gamble() {
         let expirationTime = new Date(Number(expiration.at_time) / 1e6)
         lottoComponent = <>
           We are open lotto state {expirationTime.toDateString()}
-
           <FormControl>
             <FormLabel>Amount</FormLabel>
             <NumberInput max={50} min={0}>
