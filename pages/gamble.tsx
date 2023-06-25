@@ -36,10 +36,11 @@ import {CwLottoClient} from "../codegen/CwLotto.client";
 // -
 export default function Gamble() {
   const router = useRouter();
-  const [client, setClient] = useState<CwLottoClient | null>(null);
+  const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
   const [inputValue, setInputValue] = useState<any>(null);
   const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
 
+  const [numTickets, setNumTickets] = useState<number | null>(null);
   const lottoState = useCwLottoState(CW_LOTTO_ADDRESS);
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function Gamble() {
     }));
   }, [address, getRestEndpoint, getRpcEndpoint]);
 
+
   useEffect(() => {
     if (!address) {
       return
@@ -61,22 +63,59 @@ export default function Gamble() {
           console.error("cosmwasmClient undefined or address undefined.");
           return;
         }
-        setClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
+        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
       });
   }, [address, getSigningCosmWasmClient]);
 
+  useEffect(() => {
+    if (!address) {
+      return
+    }
+    getSigningCosmWasmClient()
+      .then(signingCWClient => {
+        if (!signingCWClient || !address) {
+          console.error("cosmwasmClient undefined or address undefined.");
+          return;
+        }
+        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
+      });
+  }, [address, getSigningCosmWasmClient]);
+
+  useEffect(() => {
+    if (!address || !signingClient) {
+      return
+    }
+
+    signingClient.ticketCount({addr: address}).then(x => {
+      setNumTickets(x.tickets);
+    });
+
+  }, [address, signingClient]);
+
+
   let lottoComponent;
+
+  let currenBoughtNumber;
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value);
 
   const handleButtonClick =   async () => {
-    let buyTicket = await client?.buyTicket({numTickets: 1}, null, null, );
-
     let fee: Coin = {
-      amount: "1000", denom: STAKINGDENOM,
+      amount: "100", denom: STAKINGDENOM,
     };
+
+    let funds: Coin[] = [fee];
+
+    let buyTicket = await signingClient?.buyTicket({numTickets: 1}, "auto", undefined, funds);
+    console.log(buyTicket);
     // Perform further actions with the input value
   };
+
+  if (numTickets && numTickets !== null) {
+    currenBoughtNumber = <div>
+      Tickets currently bought: {numTickets}
+    </div>
+  }
 
   if (lottoState) {
     if ("OPEN" in  lottoState) {
@@ -143,6 +182,7 @@ export default function Gamble() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
+      <div>{currenBoughtNumber}</div>
       <div>{lottoComponent}</div>
 
     </Container>
