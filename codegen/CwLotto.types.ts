@@ -6,7 +6,7 @@
 
 export type Duration = {
   height: number;
-  } | {
+} | {
   time: number;
 };
 export type Uint128 = string;

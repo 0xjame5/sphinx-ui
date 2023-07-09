@@ -19,9 +19,6 @@ import {useRouter} from 'next/router'
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
 import {ChangeEvent, useEffect, useState} from "react";
 import {CwLottoClient} from "../codegen/CwLotto.client";
-import {GasPrice} from "@cosmjs/stargate";
-import {getSigningCosmosClientOptions, getSigningCosmwasmClient} from "interchain";
-// import {Coin} from "@keplr-wallet/unit";
 
 /*
 * If In progress then make it possible to buy tickets. Define how many inputted tickets enabled
@@ -39,16 +36,11 @@ import {getSigningCosmosClientOptions, getSigningCosmwasmClient} from "interchai
 // -
 export default function Gamble() {
   const router = useRouter();
-
-  const [client, setClient] = useState<CwLottoClient | null>(null);
-
+  const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
   const [inputValue, setInputValue] = useState<any>(null);
-
-
   const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
 
-  // console.log(chain.chain_id);
-
+  const [numTickets, setNumTickets] = useState<number | null>(null);
   const lottoState = useCwLottoState(CW_LOTTO_ADDRESS);
 
   useEffect(() => {
@@ -61,6 +53,19 @@ export default function Gamble() {
   }, [address, getRestEndpoint, getRpcEndpoint]);
 
 
+  useEffect(() => {
+    if (!address) {
+      return
+    }
+    getSigningCosmWasmClient()
+      .then(signingCWClient => {
+        if (!signingCWClient || !address) {
+          console.error("cosmwasmClient undefined or address undefined.");
+          return;
+        }
+        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
+      });
+  }, [address, getSigningCosmWasmClient]);
 
   useEffect(() => {
     if (!address) {
@@ -72,36 +77,54 @@ export default function Gamble() {
           console.error("cosmwasmClient undefined or address undefined.");
           return;
         }
-        setClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
+        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
       });
   }, [address, getSigningCosmWasmClient]);
 
+  useEffect(() => {
+    if (!address || !signingClient) {
+      return
+    }
+
+    signingClient.ticketCount({addr: address}).then(x => {
+      setNumTickets(x.tickets);
+    });
+
+  }, [address, signingClient]);
+
+
   let lottoComponent;
+  let currenBoughtNumber;
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value);
 
   const handleButtonClick =   async () => {
+    let fee: Coin = {
+      amount: "100", denom: STAKINGDENOM,
+    };
 
-    let buyTicket = await client?.buyTicket({numTickets: 1} );
+    let funds: Coin[] = [fee];
 
-    // console.log(buyTicket.logs);
+    let buyTicket = await signingClient?.buyTicket({numTickets: 1}, "auto", undefined, funds);
+    console.log(buyTicket);
     // Perform further actions with the input value
   };
+
+  if (numTickets) {
+    currenBoughtNumber = <div>
+      Tickets currently bought: {numTickets}
+    </div>
+  }
 
   if (lottoState) {
     if ("OPEN" in  lottoState) {
       const openState = lottoState.OPEN;
       // hey you can vote and try and get tickets. =]
-
       console.log(lottoState.OPEN.expiration);
 
       // if open, see how many tickets we have bought.
-
       // render components that can then be executable.
 
-      let fee: Coin = {
-        amount: "1000", denom: STAKINGDENOM,
-      };
       let expiration = openState.expiration;
 
       if ('at_time' in expiration) {
@@ -112,7 +135,6 @@ export default function Gamble() {
         let expirationTime = new Date(Number(expiration.at_time) / 1e6)
         lottoComponent = <>
           We are open lotto state {expirationTime.toDateString()}
-
           <FormControl>
             <FormLabel>Amount</FormLabel>
             <NumberInput max={50} min={0}>
@@ -138,9 +160,17 @@ export default function Gamble() {
       </div>
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
-      lottoComponent  = <div>
-        Lotto is done
-      </div>
+
+      if (closedState.claimed) {
+        lottoComponent  = <div>
+          Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
+        </div>
+      } else {
+        lottoComponent  = <div>
+          Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
+        </div>
+      }
+
     } else {
       console.error("Somehow got different lottoState")
     }
@@ -156,8 +186,22 @@ export default function Gamble() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
+      <div>{currenBoughtNumber}</div>
       <div>{lottoComponent}</div>
 
     </Container>
   );
+}
+
+
+function ClaimComponent() {
+
+  // only is rendered during component claimed. ok so this page will be responsible for generating
+  // the assumption before initiating this component is that the state is in closed
+
+
+
+
+  return (<>
+  </>);
 }
