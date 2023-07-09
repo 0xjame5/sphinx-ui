@@ -42,7 +42,7 @@ export default function Admin() {
   const handleButtonClick = async () => {
     if (seedValue) {
       console.log(seedValue);
-      let executeLottery = await client?.executeLottery({seed: seedValue});
+      let executeLottery = await client?.executeLottery({seed: seedValue}, "auto");
       console.log(executeLottery);
     }
 

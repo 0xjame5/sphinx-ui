@@ -94,7 +94,6 @@ export default function Gamble() {
 
 
   let lottoComponent;
-
   let currenBoughtNumber;
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value);
@@ -111,7 +110,7 @@ export default function Gamble() {
     // Perform further actions with the input value
   };
 
-  if (numTickets && numTickets !== null) {
+  if (numTickets) {
     currenBoughtNumber = <div>
       Tickets currently bought: {numTickets}
     </div>
@@ -121,13 +120,10 @@ export default function Gamble() {
     if ("OPEN" in  lottoState) {
       const openState = lottoState.OPEN;
       // hey you can vote and try and get tickets. =]
-
       console.log(lottoState.OPEN.expiration);
 
       // if open, see how many tickets we have bought.
-
       // render components that can then be executable.
-
 
       let expiration = openState.expiration;
 
@@ -164,9 +160,17 @@ export default function Gamble() {
       </div>
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
-      lottoComponent  = <div>
-        Lotto is done
-      </div>
+
+      if (closedState.claimed) {
+        lottoComponent  = <div>
+          Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
+        </div>
+      } else {
+        lottoComponent  = <div>
+          Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
+        </div>
+      }
+
     } else {
       console.error("Somehow got different lottoState")
     }
@@ -187,4 +191,17 @@ export default function Gamble() {
 
     </Container>
   );
+}
+
+
+function ClaimComponent() {
+
+  // only is rendered during component claimed. ok so this page will be responsible for generating
+  // the assumption before initiating this component is that the state is in closed
+
+
+
+
+  return (<>
+  </>);
 }
