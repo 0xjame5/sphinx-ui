@@ -52,21 +52,6 @@ export default function Gamble() {
     }));
   }, [address, getRestEndpoint, getRpcEndpoint]);
 
-
-  useEffect(() => {
-    if (!address) {
-      return
-    }
-    getSigningCosmWasmClient()
-      .then(signingCWClient => {
-        if (!signingCWClient || !address) {
-          console.error("cosmwasmClient undefined or address undefined.");
-          return;
-        }
-        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
-      });
-  }, [address, getSigningCosmWasmClient]);
-
   useEffect(() => {
     if (!address) {
       return
@@ -100,7 +85,7 @@ export default function Gamble() {
 
   const handleButtonClick =   async () => {
     let fee: Coin = {
-      amount: "100", denom: STAKINGDENOM,
+      amount: "100000", denom: STAKINGDENOM,
     };
 
     let funds: Coin[] = [fee];
@@ -168,6 +153,7 @@ export default function Gamble() {
       } else {
         lottoComponent  = <div>
           Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
+          <ClaimComponent/>
         </div>
       }
 
@@ -196,12 +182,31 @@ export default function Gamble() {
 
 function ClaimComponent() {
 
+  const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
+  const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
+
   // only is rendered during component claimed. ok so this page will be responsible for generating
   // the assumption before initiating this component is that the state is in closed
+  useEffect(() => {
+    if (!address) {
+      return
+    }
+    getSigningCosmWasmClient()
+      .then(signingCWClient => {
+        if (!signingCWClient || !address) {
+          console.error("cosmwasmClient undefined or address undefined.");
+          return;
+        }
+        setSigningClient(new CwLottoClient(signingCWClient, address, CW_LOTTO_ADDRESS));
+      });
+  }, [address, getSigningCosmWasmClient]);
 
 
-
+  const handleButtonClick =   async () => {
+    let claimTokens = await signingClient?.claimTokens("auto", undefined, [])
+  };
 
   return (<>
+    <Button onClick={handleButtonClick}>Claim your winnings!</Button>
   </>);
 }
