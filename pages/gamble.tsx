@@ -153,11 +153,7 @@ export default function Gamble() {
       } else {
         lottoComponent  = <div>
           Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
-
-          <ClaimComponent>
-
-          </ClaimComponent>
-
+          <ClaimComponent/>
         </div>
       }
 
