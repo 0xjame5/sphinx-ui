@@ -19,6 +19,7 @@ import {useRouter} from 'next/router'
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
 import {ChangeEvent, useEffect, useState} from "react";
 import {CwLottoClient} from "../codegen/CwLotto.client";
+import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 
 /*
 * If In progress then make it possible to buy tickets. Define how many inputted tickets enabled
@@ -37,11 +38,12 @@ import {CwLottoClient} from "../codegen/CwLotto.client";
 export default function Gamble() {
   const router = useRouter();
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
-  const [inputValue, setInputValue] = useState<any>(null);
+  const [inputValue, setInputValue] = useState<string | ReadonlyArray<string> | number | undefined>(undefined);
   const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
 
-  const [numTickets, setNumTickets] = useState<number | null>(null);
+  const [numTickets, setNumTickets] = useState<number | null | undefined>(null);
   const lottoState = useCwLottoState(CW_LOTTO_ADDRESS);
+  const lottoConfig = useCwLottoConfig(CW_LOTTO_ADDRESS);
 
   useEffect(() => {
     getRpcEndpoint().then((resp => {
@@ -67,32 +69,37 @@ export default function Gamble() {
   }, [address, getSigningCosmWasmClient]);
 
   useEffect(() => {
-    if (!address || !signingClient) {
-      return
-    }
+    if (!address || !signingClient) {return}
 
     signingClient.ticketCount({addr: address}).then(x => {
       setNumTickets(x.tickets);
     });
 
-  }, [address, signingClient]);
+  },  [address, signingClient]);
 
 
   let lottoComponent;
   let currenBoughtNumber;
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+    setInputValue(Number(event.target.value));
+  };
 
   const handleButtonClick =   async () => {
+    let ticketUnitCost: string | undefined = lottoConfig?.ticket_unit_cost.amount;
+    let ticketUnitDenom: string | undefined = lottoConfig?.ticket_unit_cost.denom;
+
+    if (ticketUnitDenom == undefined || ticketUnitCost == undefined) {
+      console.error("Test world");
+      return;
+    }
+
+    let totalCost = Number(inputValue) * Number(ticketUnitCost);
+
     let fee: Coin = {
-      amount: "100000", denom: STAKINGDENOM,
+      amount: totalCost.toString(), denom: ticketUnitDenom,
     };
-
-    let funds: Coin[] = [fee];
-
-    let buyTicket = await signingClient?.buyTicket({numTickets: 1}, "auto", undefined, funds);
-    console.log(buyTicket);
-    // Perform further actions with the input value
   };
 
   if (numTickets) {

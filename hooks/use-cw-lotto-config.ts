@@ -1,18 +1,20 @@
 import {useEffect, useState} from "react";
 import {useChain, useWallet} from "@cosmos-kit/react";
 import {CwLottoQueryClient} from "../codegen/CwLotto.client";
-import {LotteryState} from "../codegen/CwLotto.types";
+import {Config, LotteryState} from "../codegen/CwLotto.types";
 import {chainName} from "../config";
 
 
-export function useCwLottoState(contractAddress: string){
+export function useCwLottoConfig(contractAddress: string){
   const {
     address,
     chain: chainInfo,
     getCosmWasmClient,
   } = useChain(chainName);
 
-  const [queryClient, setQueryClient] = useState<CwLottoQueryClient | null>(null);
+  const [queryClient, setQueryClient] = useState<CwLottoQueryClient | null>(
+    null
+  );
 
   useEffect(() => {
     getCosmWasmClient().then((cosmwasmClient) => {
@@ -24,16 +26,13 @@ export function useCwLottoState(contractAddress: string){
     });
   }, [address, contractAddress, getCosmWasmClient]);
 
-  const [state, setState] = useState<LotteryState | null>(null);
+  const [config, setConfig] = useState<Config | null>(null);
 
   useEffect(() => {
     if (queryClient && address) {
-      queryClient.lotteryState().then((lotteryStateResp => {
-        let y = lotteryStateResp.lotto_state;
-        setState(y);
-      }))
+      queryClient.config().then((lotteryStateResp => setConfig(lotteryStateResp.config)))
     }
   }, [queryClient, address]);
 
-  return state;
+  return config;
 }
