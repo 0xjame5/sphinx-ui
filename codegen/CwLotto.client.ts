@@ -6,7 +6,7 @@
 
 import { CosmWasmClient, SigningCosmWasmClient, ExecuteResult } from "@cosmjs/cosmwasm-stargate";
 import { StdFee } from "@cosmjs/amino";
-import { Duration, Uint128, InstantiateMsg, Coin, ExecuteMsg, QueryMsg, Addr, LotteryState, Expiration, Timestamp, Uint64, LotteryStateResponse, TicketResponse } from "./CwLotto.types";
+import { Duration, Uint128, InstantiateMsg, Coin, ExecuteMsg, QueryMsg, Addr, Decimal, ConfigResponse, Config, LotteryState, Expiration, Timestamp, Uint64, LotteryStateResponse, TicketResponse } from "./CwLotto.types";
 export interface CwLottoReadOnlyInterface {
   contractAddress: string;
   ticketCount: ({
@@ -15,6 +15,7 @@ export interface CwLottoReadOnlyInterface {
     addr: Addr;
   }) => Promise<TicketResponse>;
   lotteryState: () => Promise<LotteryStateResponse>;
+  config: () => Promise<ConfigResponse>;
 }
 export class CwLottoQueryClient implements CwLottoReadOnlyInterface {
   client: CosmWasmClient;
@@ -25,6 +26,7 @@ export class CwLottoQueryClient implements CwLottoReadOnlyInterface {
     this.contractAddress = contractAddress;
     this.ticketCount = this.ticketCount.bind(this);
     this.lotteryState = this.lotteryState.bind(this);
+    this.config = this.config.bind(this);
   }
 
   ticketCount = async ({
@@ -41,6 +43,11 @@ export class CwLottoQueryClient implements CwLottoReadOnlyInterface {
   lotteryState = async (): Promise<LotteryStateResponse> => {
     return this.client.queryContractSmart(this.contractAddress, {
       lottery_state: {}
+    });
+  };
+  config = async (): Promise<ConfigResponse> => {
+    return this.client.queryContractSmart(this.contractAddress, {
+      config: {}
     });
   };
 }

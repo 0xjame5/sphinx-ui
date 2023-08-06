@@ -38,8 +38,19 @@ export type QueryMsg = {
   };
 } | {
   lottery_state: {};
+} | {
+  config: {};
 };
 export type Addr = string;
+export type Decimal = string;
+export interface ConfigResponse {
+  config: Config;
+}
+export interface Config {
+  admin: Addr;
+  house_fee: Decimal;
+  ticket_unit_cost: Coin;
+}
 export type LotteryState = {
   OPEN: {
     expiration: Expiration;
