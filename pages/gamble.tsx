@@ -39,7 +39,7 @@ export default function Gamble() {
   const router = useRouter();
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
   const [inputValue, setInputValue] = useState<string | ReadonlyArray<string> | number | undefined>(undefined);
-  const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
+  const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
 
   const [numTickets, setNumTickets] = useState<number | null | undefined>(null);
   const lottoState = useCwLottoState(CW_LOTTO_ADDRESS);
@@ -69,13 +69,15 @@ export default function Gamble() {
   }, [address, getSigningCosmWasmClient]);
 
   useEffect(() => {
-    if (!address || !signingClient) {return}
+    if (!address || !signingClient) {
+      return
+    }
 
     signingClient.ticketCount({addr: address}).then(x => {
       setNumTickets(x.tickets);
     });
 
-  },  [address, signingClient]);
+  }, [address, signingClient]);
 
 
   let lottoComponent;
@@ -86,12 +88,10 @@ export default function Gamble() {
     setInputValue(Number(event.target.value));
   };
 
-  const handleButtonClick =   async () => {
+  const handleButtonClick = async () => {
     let ticketUnitCost: string | undefined = lottoConfig?.ticket_unit_cost.amount;
     let ticketUnitDenom: string | undefined = lottoConfig?.ticket_unit_cost.denom;
-
     if (ticketUnitDenom == undefined || ticketUnitCost == undefined) {
-      console.error("Test world");
       return;
     }
 
@@ -100,6 +100,9 @@ export default function Gamble() {
     let fee: Coin = {
       amount: totalCost.toString(), denom: ticketUnitDenom,
     };
+
+    let buyTicket = await signingClient?.buyTicket({numTickets: 1}, "auto", undefined, [fee]);
+    console.log(buyTicket);
   };
 
   if (numTickets) {
@@ -109,7 +112,7 @@ export default function Gamble() {
   }
 
   if (lottoState) {
-    if ("OPEN" in  lottoState) {
+    if ("OPEN" in lottoState) {
       const openState = lottoState.OPEN;
       // hey you can vote and try and get tickets. =]
       console.log(lottoState.OPEN.expiration);
@@ -126,14 +129,14 @@ export default function Gamble() {
         // for now, assume that they can vote.
         let expirationTime = new Date(Number(expiration.at_time) / 1e6)
         lottoComponent = <>
-          We are open lotto state {expirationTime.toDateString()}
+                    We are open lotto state {expirationTime.toDateString()}
           <FormControl>
             <FormLabel>Amount</FormLabel>
             <NumberInput max={50} min={0}>
-              <NumberInputField value={inputValue} onChange={handleInputChange} />
+              <NumberInputField value={inputValue} onChange={handleInputChange}/>
               <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
+                <NumberIncrementStepper/>
+                <NumberDecrementStepper/>
               </NumberInputStepper>
             </NumberInput>
           </FormControl>
@@ -147,19 +150,19 @@ export default function Gamble() {
       // to do so this.
     } else if ('CHOOSING' in lottoState) {
       const choosingState = lottoState.CHOOSING;
-      lottoComponent  = <div>
-        We are waiting for admin to execute the winning lottery.
+      lottoComponent = <div>
+                We are waiting for admin to execute the winning lottery.
       </div>
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
 
       if (closedState.claimed) {
-        lottoComponent  = <div>
-          Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
+        lottoComponent = <div>
+                    Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
         </div>
       } else {
-        lottoComponent  = <div>
-          Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
+        lottoComponent = <div>
+                    Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
           <ClaimComponent/>
         </div>
       }
@@ -189,7 +192,7 @@ export default function Gamble() {
 
 function ClaimComponent() {
 
-  const { address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain }= useChain(chainName);
+  const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
 
   // only is rendered during component claimed. ok so this page will be responsible for generating
@@ -209,7 +212,7 @@ function ClaimComponent() {
   }, [address, getSigningCosmWasmClient]);
 
 
-  const handleButtonClick =   async () => {
+  const handleButtonClick = async () => {
     let claimTokens = await signingClient?.claimTokens("auto", undefined, [])
   };
 
