@@ -94,14 +94,19 @@ export default function Gamble() {
     if (ticketUnitDenom == undefined || ticketUnitCost == undefined) {
       return;
     }
+    let parsedInputValue = Number(inputValue);
+    // if (numTickets == undefined) {
+    //   return;
+    // }
 
     let totalCost = Number(inputValue) * Number(ticketUnitCost);
 
     let fee: Coin = {
       amount: totalCost.toString(), denom: ticketUnitDenom,
     };
+    console.log(numTickets);
 
-    let buyTicket = await signingClient?.buyTicket({numTickets: 1}, "auto", undefined, [fee]);
+    let buyTicket = await signingClient?.buyTicket({numTickets: parsedInputValue}, "auto", undefined, [fee]);
     console.log(buyTicket);
   };
 
