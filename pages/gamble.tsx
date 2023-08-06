@@ -22,7 +22,6 @@ import {CwLottoClient} from "../codegen/CwLotto.client";
 import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 
 export default function Gamble() {
-  const router = useRouter();
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
   const [inputValue, setInputValue] = useState<string | ReadonlyArray<string> | number | undefined>(undefined);
   const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
@@ -83,24 +82,16 @@ export default function Gamble() {
     let fee: Coin = {
       amount: totalCost.toString(), denom: ticketUnitDenom,
     };
-    let buyTicket = await signingClient?.buyTicket({numTickets: parsedInputValue}, "auto", undefined, [fee]);
+    await signingClient?.buyTicket({numTickets: parsedInputValue}, "auto", undefined, [fee]);
   };
 
   if (numTickets) {
-    currenBoughtNumber = <div>
-      Tickets currently bought: {numTickets}
-    </div>
+    currenBoughtNumber = <div>Tickets currently bought: {numTickets}</div>
   }
 
   if (lottoState) {
     if ("OPEN" in lottoState) {
       const openState = lottoState.OPEN;
-      // hey you can vote and try and get tickets. =]
-      console.log(lottoState.OPEN.expiration);
-
-      // if open, see how many tickets we have bought.
-      // render components that can then be executable.
-
       let expiration = openState.expiration;
 
       if ('at_time' in expiration) {
@@ -123,12 +114,7 @@ export default function Gamble() {
           </FormControl>
           <Button onClick={handleButtonClick}>submit</Button>
         </>
-      } else {
-        console.error("We don't care")
       }
-
-      // if a user can vote, he can enable somethings via the execute function so now we need
-      // to do so this.
     } else if ('CHOOSING' in lottoState) {
       const choosingState = lottoState.CHOOSING;
       lottoComponent = <div>
@@ -136,10 +122,9 @@ export default function Gamble() {
       </div>
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
-
       if (closedState.claimed) {
         lottoComponent = <div>
-                    Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
+            Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
         </div>
       } else {
         lottoComponent = <div>
