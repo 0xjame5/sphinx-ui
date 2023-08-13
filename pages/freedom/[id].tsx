@@ -30,8 +30,8 @@ export default function FreedomPage() {
   const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
 
   const [numTickets, setNumTickets] = useState<number | null | undefined>(null);
-  const lottoState = useCwLottoState(id as string);
-  const lottoConfig = useCwLottoConfig(id as string);
+  const lottoState = useCwLottoState(contractAddr);
+  const lottoConfig = useCwLottoConfig(contractAddr);
 
   useEffect(() => {
     getRpcEndpoint().then((resp => {
