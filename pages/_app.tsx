@@ -31,7 +31,6 @@ function CreateCosmosApp({Component, pageProps}: AppProps) {
       }
     },
   };
-
   return (
     <ChakraProvider theme={defaultTheme}>
       <ChainProvider

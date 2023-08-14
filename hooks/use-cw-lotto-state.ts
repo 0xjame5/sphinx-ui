@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import {useChain, useWallet} from "@cosmos-kit/react";
+import {useChain} from "@cosmos-kit/react";
 import {CwLottoQueryClient} from "../codegen/CwLotto.client";
 import {LotteryState} from "../codegen/CwLotto.types";
 import {chainName} from "../config";
 
 
-export function useCwLottoState(contractAddress: string){
+export function useCwLottoState(contractAddress: string) {
   const {
     address,
     chain: chainInfo,
