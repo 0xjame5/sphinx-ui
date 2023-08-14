@@ -60,11 +60,7 @@ export default function FreedomPage() {
     if (!address || !signingClient) {
       return
     }
-
-    signingClient.ticketCount({addr: address}).then(x => {
-      setNumTickets(x.tickets);
-    });
-
+    signingClient.ticketCount({addr: address}).then(x => setNumTickets(x.tickets));
   }, [address, signingClient]);
 
   let lottoComponent;

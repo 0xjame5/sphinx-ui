@@ -10,6 +10,8 @@ export const feeDenom = 'ujunox';
 
 export const CW_LOTTO_ADDRESS = 'juno1law3szlnn4snqe6gylgt3h7r003e549fjs9sl9tf6zh3w480e33shlqrlp';
 
+// export const FREEDOM_LIST: [string] = []
+
 export const chainassets: AssetList = assets.find(
   (chain) => chain.chain_name === chainName
 ) as AssetList;
