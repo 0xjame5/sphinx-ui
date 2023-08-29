@@ -3,11 +3,6 @@ import {Container} from "@chakra-ui/react";
 import Head from "next/head";
 import {
   Button,
-  FormControl,
-  FormLabel, NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput, NumberInputField,
-  NumberInputStepper,
 } from "@chakra-ui/react";
 
 import {useChain, useWallet} from "@cosmos-kit/react";
@@ -15,10 +10,11 @@ import {useChain, useWallet} from "@cosmos-kit/react";
 
 import {Coin} from "../../codegen/CwLotto.types";
 import {useCwLottoState} from "../../hooks/use-cw-lotto-state";
-import {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {CwLottoClient} from "../../codegen/CwLotto.client";
 import {useCwLottoConfig} from "../../hooks/use-cw-lotto-config";
 import {chainName} from "../../config";
+import {Icon, Form, Grid, Segment} from "semantic-ui-react";
 
 export default function FreedomPage() {
   const router = useRouter();
@@ -64,7 +60,6 @@ export default function FreedomPage() {
   }, [address, signingClient]);
 
   let lottoComponent;
-  let currenBoughtNumber;
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(Number(event.target.value));
@@ -84,41 +79,53 @@ export default function FreedomPage() {
     await signingClient?.buyTicket({numTickets: parsedInputValue}, "auto", undefined, [fee]);
   };
 
-  if (numTickets) {
-    currenBoughtNumber = <div>Tickets currently bought: {numTickets}</div>
-  }
+  // if (numTickets) {
+  //   currenBoughtNumber = <div>Tickets currently bought: {numTickets}</div>
+  // }
 
   if (lottoState) {
     if ("OPEN" in lottoState) {
       const openState = lottoState.OPEN;
       let expiration = openState.expiration;
-
       if ('at_time' in expiration) {
-        const atTimeValue = expiration.at_time
-
         // if expiration time is after today, let the user update the state to the in progress to decide winner
         // for now, assume that they can vote.
         let expirationTime = new Date(Number(expiration.at_time) / 1e6)
         lottoComponent = <>
-                    We are open lotto state {expirationTime.toDateString()}
-          <FormControl>
-            <FormLabel>Amount</FormLabel>
-            <NumberInput max={50} min={0}>
-              <NumberInputField value={inputValue} onChange={handleInputChange}/>
-              <NumberInputStepper>
-                <NumberIncrementStepper/>
-                <NumberDecrementStepper/>
-              </NumberInputStepper>
-            </NumberInput>
-          </FormControl>
-          <Button onClick={handleButtonClick}>submit</Button>
+          <Grid>
+            <Grid.Row columns={2} divided={true}>
+              <Grid.Column width={12}>
+                                We are open lotto state {expirationTime.toDateString()}
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <TicketCard numTickets={numTickets}/>
+                <Form>
+                  <Form.Input
+                    type="number"
+                    label="Number of Tickets"
+                    placeholder="Enter a number"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                  />
+                  <Button onClick={handleButtonClick} type='submit'>Buy</Button>
+                </Form>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
         </>
       }
     } else if ('CHOOSING' in lottoState) {
       const choosingState = lottoState.CHOOSING;
-      lottoComponent = <div>
-                We are waiting for admin to execute the winning lottery.
-      </div>
+      lottoComponent = <><Grid>
+        <Grid.Row columns={2} divided={true}>
+          <Grid.Column width={12}>
+                        We are waiting for admin to execute the winning lottery.
+          </Grid.Column>
+          <Grid.Column width={4}>
+            <TicketCard numTickets={numTickets}/>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid></>
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
       if (closedState.claimed) {
@@ -141,7 +148,6 @@ export default function FreedomPage() {
         <meta name="description" content="Sphinx CosmWasm App"/>
         <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <div>{currenBoughtNumber}</div>
       <div>{lottoComponent}</div>
     </Container>
   );
@@ -178,4 +184,19 @@ const ClaimComponent: React.FC<ClaimComponentProps> = ({contractAddr}) => {
   return (<>
     <Button onClick={handleButtonClick}>Claim your winnings!</Button>
   </>);
+}
+
+interface TicketCardProps {
+    numTickets: number | undefined | null
+}
+
+const TicketCard: React.FC<TicketCardProps> = ({numTickets}) => {
+  return (
+    <Segment>
+      {numTickets ? (
+        <p><Icon name='ticket' /> Ticket count is {numTickets}</p>
+      ) : (<p>no tickets bought yet</p>
+      )}
+    </Segment>
+  )
 }
