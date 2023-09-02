@@ -79,10 +79,6 @@ export default function FreedomPage() {
     await signingClient?.buyTicket({numTickets: parsedInputValue}, "auto", undefined, [fee]);
   };
 
-  // if (numTickets) {
-  //   currenBoughtNumber = <div>Tickets currently bought: {numTickets}</div>
-  // }
-
   if (lottoState) {
     if ("OPEN" in lottoState) {
       const openState = lottoState.OPEN;
@@ -195,7 +191,7 @@ const TicketCard: React.FC<TicketCardProps> = ({numTickets}) => {
     <Segment>
       {numTickets ? (
         <p><Icon name='ticket' /> Ticket count is {numTickets}</p>
-      ) : (<p>no tickets bought yet</p>
+      ) : (<p>No tickets bought yet</p>
       )}
     </Segment>
   )
