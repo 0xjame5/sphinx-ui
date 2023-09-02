@@ -14,7 +14,7 @@ export default function Navbar() {
         borderColor={useColorModeValue('gray.200', 'gray.900')}
         alignItems={'center'} justifyContent={'space-between'}>
         <HStack alignContent={'center'}>
-          <Box>Lotto</Box>
+          <Box>Sphinx</Box>
         </HStack>
         <Flex alignItems={'center'}>
           <HStack
