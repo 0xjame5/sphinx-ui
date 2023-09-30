@@ -1,11 +1,11 @@
 import {useRouter} from 'next/router';
 import {Container} from "@chakra-ui/react";
 import Head from "next/head";
-import {
-  Button,
-} from "@chakra-ui/react";
 
-import {useChain, useWallet} from "@cosmos-kit/react";
+
+import {Button} from 'semantic-ui-react'
+
+import {useChain} from "@cosmos-kit/react";
 
 
 import {Coin} from "../../codegen/CwLotto.types";
@@ -14,7 +14,9 @@ import React, {ChangeEvent, useEffect, useState} from "react";
 import {CwLottoClient} from "../../codegen/CwLotto.client";
 import {useCwLottoConfig} from "../../hooks/use-cw-lotto-config";
 import {chainName} from "../../config";
-import {Icon, Form, Grid, Segment} from "semantic-ui-react";
+import {Form, Grid, Segment, Header} from "semantic-ui-react";
+import {TicketCard} from "../../components/react/ticket-card";
+import {CountdownCard} from "../../components/react/countdown-card";
 
 export default function FreedomPage() {
   const router = useRouter();
@@ -91,7 +93,14 @@ export default function FreedomPage() {
           <Grid>
             <Grid.Row columns={2} divided={true}>
               <Grid.Column width={12}>
-                                We are open lotto state {expirationTime.toDateString()}
+                <Segment>
+                  <Header as='h3' style={{fontSize: '2em'}}>
+                      Lottery is still Open
+                  </Header>
+                  <CountdownCard finalDate={expirationTime}/>
+                  <p>Cost per
+                      ticket: {lottoConfig?.ticket_unit_cost.amount}{lottoConfig?.ticket_unit_cost.denom}</p>
+                </Segment>
               </Grid.Column>
               <Grid.Column width={4}>
                 <TicketCard numTickets={numTickets}/>
@@ -115,7 +124,14 @@ export default function FreedomPage() {
       lottoComponent = <><Grid>
         <Grid.Row columns={2} divided={true}>
           <Grid.Column width={12}>
-                        We are waiting for admin to execute the winning lottery.
+            <Segment>
+              <Header as='h3' style={{fontSize: '2em'}}>
+                                Waiting for lottery to be executed
+              </Header>
+              <p>
+                                The lottery is waiting to be executed on the chain.
+              </p>
+            </Segment>
           </Grid.Column>
           <Grid.Column width={4}>
             <TicketCard numTickets={numTickets}/>
@@ -125,13 +141,44 @@ export default function FreedomPage() {
     } else if ('CLOSED' in lottoState) {
       const closedState = lottoState.CLOSED;
       if (closedState.claimed) {
-        lottoComponent = <div>
-                    Lotto is done with winner: {closedState.winner}. and is claimed via {closedState.claimed}
-        </div>
+        lottoComponent = <><Grid>
+          <Grid.Row columns={2} divided={true}>
+            <Grid.Column width={12}>
+              <Segment>
+                <Header as='h3' style={{fontSize: '2em'}}>
+                                    Waiting for lottery to be executed
+                </Header>
+                <p>
+                                    The lottery is waiting to be executed on the chain.
+                </p>
+              </Segment>
+            </Grid.Column>
+            <Grid.Column width={4}>
+              <TicketCard numTickets={numTickets}/>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid></>
       } else {
         lottoComponent = <div>
-                    Lotto is done with winner: {closedState.winner}. and is not claimed via {closedState.claimed}
-          <ClaimComponent contractAddr={contractAddr}/>
+          <Grid>
+            <Grid.Row columns={2} divided={true}>
+              <Grid.Column width={12}>
+                <Segment>
+                  <Header as='h3' style={{fontSize: '2em'}}>
+                                        Lottery has completed and has been claimed
+                  </Header>
+                  <p>
+                                        The winner is: is {closedState.winner}.
+                  </p>
+                  <ClaimComponent contractAddr={contractAddr}/>
+                </Segment>
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <TicketCard numTickets={numTickets}/>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+
         </div>
       }
     }
@@ -156,7 +203,6 @@ interface ClaimComponentProps {
 const ClaimComponent: React.FC<ClaimComponentProps> = ({contractAddr}) => {
   const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
-
   // only is rendered during component claimed. ok so this page will be responsible for generating
   // the assumption before initiating this component is that the state is in closed
   useEffect(() => {
@@ -182,17 +228,3 @@ const ClaimComponent: React.FC<ClaimComponentProps> = ({contractAddr}) => {
   </>);
 }
 
-interface TicketCardProps {
-    numTickets: number | undefined | null
-}
-
-const TicketCard: React.FC<TicketCardProps> = ({numTickets}) => {
-  return (
-    <Segment>
-      {numTickets ? (
-        <p><Icon name='ticket' /> Ticket count is {numTickets}</p>
-      ) : (<p>No tickets bought yet</p>
-      )}
-    </Segment>
-  )
-}

@@ -11,7 +11,6 @@ export function useCwLottoState(contractAddress: string) {
     chain: chainInfo,
     getCosmWasmClient,
   } = useChain(chainName);
-
   const [queryClient, setQueryClient] = useState<CwLottoQueryClient | null>(null);
 
   useEffect(() => {
@@ -28,10 +27,7 @@ export function useCwLottoState(contractAddress: string) {
 
   useEffect(() => {
     if (queryClient && address) {
-      queryClient.lotteryState().then((lotteryStateResp => {
-        let y = lotteryStateResp.lotto_state;
-        setState(y);
-      }))
+      queryClient.lotteryState().then(lotteryStateResp => setState(lotteryStateResp.lotto_state))
     }
   }, [queryClient, address]);
 
