@@ -14,22 +14,26 @@ export const LotteryStateCard: React.FC<LotteryStateCardProps> = ({lotteryState,
     <Segment>
       <Header as='h3' style={{fontSize: '2em'}}>
         {
-          "OPEN" in lotteryState ?  (
-            <>Hello world</>
-          ) : "PENDING" in lotteryState ? (
+          "OPEN" in lotteryState ? (
+            <>Lottery is Open</>
+          ) : "CHOOSING" in lotteryState ? (
             <>Waiting for lottery to be executed</>
-          ) : <>Lottery has finished</>
+          ) : "CLOSED" in lotteryState ? (
+            <>Lottery has finished</>
+          ) : <>Unknown lottery state reached</>
         }
       </Header>
       {"OPEN" in lotteryState && "at_time" in lotteryState.OPEN.expiration &&
-          <CountdownCard finalDate={new Date(Number(lotteryState.OPEN.expiration.at_time) / 1e6)}/>}
+              <CountdownCard finalDate={new Date(Number(lotteryState.OPEN.expiration.at_time) / 1e6)}/>}
       <p>
         {
-          "OPEN" in lotteryState ?  (
+          "OPEN" in lotteryState ? (
             <>Lottery is open state.</>
-          ) : "PENDING" in lotteryState ? (
+          ) : "CHOOSING" in lotteryState ? (
             <>The lottery is waiting to be executed on the chain.</>
-          ) : <>Lottery has completed.</>
+          ) : "CLOSED" in lotteryState ? (
+            <>Lottery has completed. Winner is: {lotteryState.CLOSED.winner} and {lotteryState.CLOSED.claimed ? (<>has not been claimed</>) : (<>has been claimed</>)}</>
+          ) : <>Unknown lottery state reached</>
         }
       </p>
     </Segment>
