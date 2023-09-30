@@ -1,4 +1,4 @@
-import {Header, Icon, Segment} from "semantic-ui-react";
+import {Button, Header, Icon, Segment} from "semantic-ui-react";
 import {Config, LotteryState} from "../../codegen/CwLotto.types";
 import React from "react";
 import {CountdownCard} from "./countdown-card";
@@ -36,6 +36,7 @@ export const LotteryStateCard: React.FC<LotteryStateCardProps> = ({lotteryState,
           ) : <>Unknown lottery state reached</>
         }
       </p>
+      {"OPEN" in lotteryState && <Button>Play</Button>}
     </Segment>
   )
 }
