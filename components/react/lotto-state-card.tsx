@@ -26,9 +26,7 @@ export const LotteryStateCard: React.FC<LotteryStateCardProps> = ({lotteryState,
       "OPEN" in lotteryState && "at_time" in lotteryState.OPEN.expiration &&
         <CountdownCard finalDate={new Date(Number(lotteryState.OPEN.expiration.at_time) / 1e6)}/>
     }
-
     Cost per Ticket: {lotteryConfig.ticket_unit_cost.amount}{lotteryConfig.ticket_unit_cost.denom}
-
     <p>
       {
         "OPEN" in lotteryState ? (
@@ -40,7 +38,11 @@ export const LotteryStateCard: React.FC<LotteryStateCardProps> = ({lotteryState,
         ) : <>Unknown lottery state reached</>
       }
     </p>
-    {showPlayButton && "OPEN" in lotteryState && <Button>Play</Button>}
+    { showPlayButton && <> {
+      "OPEN" in LotteryStateCard ? (
+        <Button>Play</Button>
+      ): <Button>View</Button> // Default is view
+    }</>}
   </>
   )
 }
