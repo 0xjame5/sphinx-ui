@@ -78,6 +78,7 @@ export type Timestamp = Uint64;
 export type Uint64 = string;
 export interface LotteryStateResponse {
   lotto_state: LotteryState;
+  total_tickets: number;
 }
 export interface TicketResponse {
   tickets?: number | null;
