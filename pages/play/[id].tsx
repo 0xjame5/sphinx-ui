@@ -11,7 +11,7 @@ import React, {useEffect, useState} from "react";
 import {CwLottoClient} from "../../codegen/CwLotto.client";
 import {useCwLottoConfig} from "../../hooks/use-cw-lotto-config";
 import {chainName} from "../../config";
-import {LotteryStateCard} from "../../components/react/lotto-state-card";
+import {GameStateCard} from "../../components/react/lotto-state-card";
 import {TicketCard} from "../../components/react/ticket-card";
 import {useCwLottoTicketCount} from "../../hooks/use-cw-lotto-ticket-count";
 import {ClaimButton} from "../../components/forms/claim-button";
@@ -67,7 +67,7 @@ export default function PlayPage() {
         <Grid.Column width={showSegment ? 12 : 16}>
           <Segment>
             {lottoState && lottoConfig && address &&
-                          <LotteryStateCard lotteryState={lottoState} lotteryConfig={lottoConfig}
+                          <GameStateCard contractAddress={contractAddr} gameState={lottoState} gameConfig={lottoConfig}
                             showPlayButton={false}/>
             }
           </Segment>

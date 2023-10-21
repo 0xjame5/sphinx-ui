@@ -9,7 +9,7 @@ import {CountdownCard} from "../components/react/countdown-card";
 import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
 import {PRIMARY_RUNNING_LOTTERY} from "../config/lottery";
-import {LotteryStateCard} from "../components/react/lotto-state-card";
+import {GameStateCard} from "../components/react/lotto-state-card";
 
 export default function Home() {
   const router = useRouter();
@@ -41,7 +41,7 @@ export default function Home() {
 
       {lottoState && lottoConfig &&
               <Segment>
-                <LotteryStateCard lotteryState={lottoState} lotteryConfig={lottoConfig} showPlayButton={true}/>
+                <GameStateCard contractAddress={PRIMARY_RUNNING_LOTTERY} gameState={lottoState} gameConfig={lottoConfig} showPlayButton={true}/>
               </Segment>
       }
 
