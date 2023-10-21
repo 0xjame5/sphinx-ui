@@ -2,46 +2,51 @@ import {Button, Header} from "semantic-ui-react";
 import {Config, LotteryState} from "../../codegen/CwLotto.types";
 import React from "react";
 import {CountdownCard} from "./countdown-card";
+import Link from 'next/link'
 
-export interface LotteryStateCardProps {
-    lotteryState: LotteryState,
-    lotteryConfig: Config,
+export interface GameStateCardProps {
+    contractAddress: string,
+    gameState: LotteryState,
+    gameConfig: Config,
     showPlayButton: boolean
 }
 
-export const LotteryStateCard: React.FC<LotteryStateCardProps> = ({lotteryState, lotteryConfig, showPlayButton}) => {
+export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress, gameState, gameConfig, showPlayButton}) => {
   return (<>
     <Header as='h3' style={{fontSize: '2em'}}>
       {
-        "OPEN" in lotteryState ? (
-          <>Lottery is Open</>
-        ) : "CHOOSING" in lotteryState ? (
-          <>Waiting for lottery to be executed</>
-        ) : "CLOSED" in lotteryState ? (
-          <>Lottery has finished</>
+        "OPEN" in gameState ? (
+          <>Game is Open</>
+        ) : "CHOOSING" in gameState ? (
+          <>Waiting for game to be executed</>
+        ) : "CLOSED" in gameState ? (
+          <>Game has finished</>
         ) : <>Unknown lottery state reached</>
       }
     </Header>
     {
-      "OPEN" in lotteryState && "at_time" in lotteryState.OPEN.expiration &&
-        <CountdownCard finalDate={new Date(Number(lotteryState.OPEN.expiration.at_time) / 1e6)}/>
+      "OPEN" in gameState && "at_time" in gameState.OPEN.expiration &&
+        <CountdownCard finalDate={new Date(Number(gameState.OPEN.expiration.at_time) / 1e6)}/>
     }
-    Cost per Ticket: {lotteryConfig.ticket_unit_cost.amount}{lotteryConfig.ticket_unit_cost.denom}
+    Cost per Ticket: {gameConfig.ticket_unit_cost.amount}{gameConfig.ticket_unit_cost.denom}
     <p>
       {
-        "OPEN" in lotteryState ? (
-          <>Lottery is open state.</>
-        ) : "CHOOSING" in lotteryState ? (
+        "OPEN" in gameState ? (
+          <>Game is open state.</>
+        ) : "CHOOSING" in gameState ? (
           <>The lottery is waiting to be executed on the chain.</>
-        ) : "CLOSED" in lotteryState ? (
-          <>Lottery has completed. Winner is: {lotteryState.CLOSED.winner} and {lotteryState.CLOSED.claimed ? (<>has been claimed</>) : (<>has not been claimed</>)}</>
+        ) : "CLOSED" in gameState ? (
+          <>
+
+
+              Game has completed. Winner is: {gameState.CLOSED.winner} and {gameState.CLOSED.claimed ? (<>has been claimed</>) : (<>has not been claimed</>)}</>
         ) : <>Unknown lottery state reached</>
       }
     </p>
     { showPlayButton && <> {
-      "OPEN" in LotteryStateCard ? (
-        <Button>Play</Button>
-      ): <Button>View</Button> // Default is view
+      "OPEN" in GameStateCard ? (
+        <Link href={`/play/${contractAddress}`} passHref><Button>Play</Button></Link>
+      ):<Link href={`/play/${contractAddress}`} passHref><Button>View</Button></Link>
     }</>}
   </>
   )
