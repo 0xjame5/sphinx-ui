@@ -1,4 +1,4 @@
-import {Button, Header} from "semantic-ui-react";
+import {Button, Header, Icon, List} from "semantic-ui-react";
 import {Config, LotteryState} from "../../codegen/CwLotto.types";
 import React from "react";
 import {CountdownCard} from "./countdown-card";
@@ -28,21 +28,41 @@ export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress, ga
       "OPEN" in gameState && "at_time" in gameState.OPEN.expiration &&
         <CountdownCard finalDate={new Date(Number(gameState.OPEN.expiration.at_time) / 1e6)}/>
     }
-    Cost per Ticket: {gameConfig.ticket_unit_cost.amount}{gameConfig.ticket_unit_cost.denom}
-    <p>
-      {
-        "OPEN" in gameState ? (
-          <>Game is open state.</>
-        ) : "CHOOSING" in gameState ? (
-          <>The lottery is waiting to be executed on the chain.</>
-        ) : "CLOSED" in gameState ? (
-          <>
 
+    <List>
+      <List.Item>
+        {
+          "OPEN" in gameState ? (
+            <List.Content><Icon name={'game'}/> Open to Play!</List.Content>
+          ) : "CHOOSING" in gameState ? (
+            <List.Content><Icon name={'game'}/> Pending Execution</List.Content>
+          ) : ( // "CLOSED" in gameState ?
+            <List.Content><Icon name={'game'}/> Completed</List.Content>
+          )
+        }
+      </List.Item>
 
-              Game has completed. Winner is: {gameState.CLOSED.winner} and {gameState.CLOSED.claimed ? (<>has been claimed</>) : (<>has not been claimed</>)}</>
-        ) : <>Unknown lottery state reached</>
+      {"CLOSED" in gameState &&
+            <List.Item>
+              <List.Content>
+                {gameState.CLOSED.claimed ? <Icon name={'checkmark'} />: <Icon name={'close'} />} Claimed
+              </List.Content>
+            </List.Item>
       }
-    </p>
+
+      {"CLOSED" in gameState &&
+            <List.Item>
+              <List.Content>
+                <Icon name={'winner'}/> Winner {gameState.CLOSED.winner}
+              </List.Content>
+            </List.Item>
+      }
+
+      <List.Item>
+        <List.Content><Icon name={'ticket'} /> Cost  {gameConfig.ticket_unit_cost.amount}{gameConfig.ticket_unit_cost.denom}</List.Content>
+      </List.Item>
+    </List>
+
     { showPlayButton && <> {
       "OPEN" in GameStateCard ? (
         <Link href={`/play/${contractAddress}`} passHref><Button>Play</Button></Link>
