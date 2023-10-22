@@ -13,6 +13,10 @@ export interface GameStateCardProps {
 }
 
 export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress, gameState, gameConfig, showPlayButton}) => {
+
+  console.log(gameState)
+  const prizePool = Number(gameConfig.ticket_unit_cost.amount) * Number(gameState.numberOfTickets)
+
   return (<>
     <Header as='h3' style={{fontSize: '2em'}}>
       {
@@ -41,6 +45,12 @@ export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress, ga
             <List.Content><Icon name={'game'}/> Completed</List.Content>
           )
         }
+      </List.Item>
+
+      <List.Item>
+        <List.Content>
+          <Icon name={'winner'}/> {prizePool} {gameConfig.ticket_unit_cost.denom}
+        </List.Content>
       </List.Item>
 
       {"CLOSED" in gameState.lotteryState &&
