@@ -28,8 +28,8 @@ export default function Home() {
     * - we'll have one primary and the rest list of previous per chain
     * */
 
-  const lottoState = useCwLottoState(PRIMARY_RUNNING_GAME);
-  const lottoConfig = useCwLottoConfig(PRIMARY_RUNNING_GAME);
+  const gameState = useCwLottoState(PRIMARY_RUNNING_GAME);
+  const gameConfig = useCwLottoConfig(PRIMARY_RUNNING_GAME);
 
   return (
     <Container maxW="5xl" py={10}>
@@ -39,9 +39,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
-      {lottoState && lottoConfig &&
+      {gameState && gameConfig &&
               <Segment>
-                <GameStateCard contractAddress={PRIMARY_RUNNING_GAME} gameState={lottoState} gameConfig={lottoConfig} showPlayButton={true}/>
+                <GameStateCard contractAddress={PRIMARY_RUNNING_GAME} gameState={gameState} gameConfig={gameConfig} showPlayButton={true}/>
               </Segment>
       }
 
