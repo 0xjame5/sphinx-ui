@@ -8,7 +8,7 @@ import {Header, Item, Segment} from "semantic-ui-react";
 import {CountdownCard} from "../components/react/countdown-card";
 import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
-import {PRIMARY_RUNNING_LOTTERY} from "../config/lottery";
+import {PRIMARY_RUNNING_GAME} from "../config/lottery";
 import {GameStateCard} from "../components/react/lotto-state-card";
 
 export default function Home() {
@@ -28,8 +28,8 @@ export default function Home() {
     * - we'll have one primary and the rest list of previous per chain
     * */
 
-  const lottoState = useCwLottoState(PRIMARY_RUNNING_LOTTERY);
-  const lottoConfig = useCwLottoConfig(PRIMARY_RUNNING_LOTTERY);
+  const lottoState = useCwLottoState(PRIMARY_RUNNING_GAME);
+  const lottoConfig = useCwLottoConfig(PRIMARY_RUNNING_GAME);
 
   return (
     <Container maxW="5xl" py={10}>
@@ -41,7 +41,7 @@ export default function Home() {
 
       {lottoState && lottoConfig &&
               <Segment>
-                <GameStateCard contractAddress={PRIMARY_RUNNING_LOTTERY} gameState={lottoState} gameConfig={lottoConfig} showPlayButton={true}/>
+                <GameStateCard contractAddress={PRIMARY_RUNNING_GAME} gameState={lottoState} gameConfig={lottoConfig} showPlayButton={true}/>
               </Segment>
       }
 

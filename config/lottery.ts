@@ -3,4 +3,4 @@ export const FREEDOM_LIST: string[] = [
   'juno1w4lgq9mvlvtldf0q9thqtaq986tuhy3j7jneq68lc4xhecvaa9aq8mzqhc',
 ];
 
-export const PRIMARY_RUNNING_LOTTERY = FREEDOM_LIST[0];
+export const PRIMARY_RUNNING_GAME = FREEDOM_LIST[0];

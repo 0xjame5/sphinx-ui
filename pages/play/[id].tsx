@@ -25,7 +25,8 @@ export default function PlayPage() {
   const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
   const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
 
-  const lottoState = useCwLottoState(contractAddr);
+  const gameState = useCwLottoState(contractAddr);
+  const lottoState = gameState?.lotteryState;
   const lottoConfig = useCwLottoConfig(contractAddr);
   const ticketCount = useCwLottoTicketCount(contractAddr);
 
@@ -67,7 +68,7 @@ export default function PlayPage() {
         <Grid.Column width={showSegment ? 12 : 16}>
           <Segment>
             {lottoState && lottoConfig && address &&
-                          <GameStateCard contractAddress={contractAddr} gameState={lottoState} gameConfig={lottoConfig}
+                          <GameStateCard contractAddress={contractAddr} gameState={gameState} gameConfig={lottoConfig}
                             showPlayButton={false}/>
             }
           </Segment>
