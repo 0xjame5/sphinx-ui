@@ -1,11 +1,8 @@
 import Head from "next/head";
-import {Container, useColorMode,} from "@chakra-ui/react";
-
-import {useWallet} from "@cosmos-kit/react";
+import {Container,} from "@chakra-ui/react";
 
 import {useRouter} from 'next/router'
-import {Header, Item, Segment} from "semantic-ui-react";
-import {CountdownCard} from "../components/react/countdown-card";
+import {Segment} from "semantic-ui-react";
 import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
 import {PRIMARY_RUNNING_GAME} from "../config/lottery";
@@ -22,7 +19,6 @@ export default function Home() {
     * - should we have 1 individual running lottery or several running lotteries
     * - we should have one per denom token. we can have a list
     *   of individual previously listed items, but that's separate.
-    *
     *
     * json configuration:
     * - we'll have one primary and the rest list of previous per chain
@@ -48,5 +44,3 @@ export default function Home() {
     </Container>
   );
 }
-
-

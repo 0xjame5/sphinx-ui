@@ -12,10 +12,10 @@ export interface GameStateCardProps {
     showPlayButton: boolean
 }
 
-export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress, gameState, gameConfig, showPlayButton}) => {
+export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress: contractAddress, gameState, gameConfig, showPlayButton}) => {
 
-  console.log(gameState)
-  const prizePool = Number(gameConfig.ticket_unit_cost.amount) * Number(gameState.numberOfTickets)
+  console.log(gameState);
+  const prizePool = Number(gameConfig.ticket_unit_cost.amount) * Number(gameState.numberOfTickets);
 
   return (<>
     <Header as='h3' style={{fontSize: '2em'}}>
