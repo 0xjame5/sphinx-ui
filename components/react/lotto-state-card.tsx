@@ -13,8 +13,6 @@ export interface GameStateCardProps {
 }
 
 export const GameStateCard: React.FC<GameStateCardProps> = ({contractAddress: contractAddress, gameState, gameConfig, showPlayButton}) => {
-
-  console.log(gameState);
   const prizePool = Number(gameConfig.ticket_unit_cost.amount) * Number(gameState.numberOfTickets);
 
   return (<>
