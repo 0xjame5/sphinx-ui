@@ -4,6 +4,10 @@ import {CwLottoQueryClient} from "../codegen/CwLotto.client";
 import {LotteryState} from "../codegen/CwLotto.types";
 import {chainName} from "../config";
 
+export interface GameState {
+  lotteryState: LotteryState,
+  numberOfTickets: number
+}
 
 export function useCwLottoState(contractAddress: string) {
   const {
@@ -23,11 +27,16 @@ export function useCwLottoState(contractAddress: string) {
     });
   }, [address, contractAddress, getCosmWasmClient]);
 
-  const [state, setState] = useState<LotteryState | null>(null);
+  const [state, setState] = useState<GameState | null>(null);
 
   useEffect(() => {
     if (queryClient && address) {
-      queryClient.lotteryState().then(lotteryStateResp => setState(lotteryStateResp.lotto_state))
+      queryClient.lotteryState().then(lotteryStateResp => {
+        const gameState: GameState = {
+          lotteryState: lotteryStateResp.lotto_state, numberOfTickets: lotteryStateResp.total_tickets
+        };
+        setState(gameState);
+      })
     }
   }, [queryClient, address]);
 

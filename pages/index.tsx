@@ -1,14 +1,11 @@
 import Head from "next/head";
-import {Container, useColorMode,} from "@chakra-ui/react";
-
-import {useWallet} from "@cosmos-kit/react";
+import {Container,} from "@chakra-ui/react";
 
 import {useRouter} from 'next/router'
-import {Header, Item, Segment} from "semantic-ui-react";
-import {CountdownCard} from "../components/react/countdown-card";
+import {Segment} from "semantic-ui-react";
 import {useCwLottoConfig} from "../hooks/use-cw-lotto-config";
 import {useCwLottoState} from "../hooks/use-cw-lotto-state";
-import {PRIMARY_RUNNING_LOTTERY} from "../config/lottery";
+import {PRIMARY_RUNNING_GAME} from "../config/lottery";
 import {GameStateCard} from "../components/react/lotto-state-card";
 
 export default function Home() {
@@ -23,13 +20,12 @@ export default function Home() {
     * - we should have one per denom token. we can have a list
     *   of individual previously listed items, but that's separate.
     *
-    *
     * json configuration:
     * - we'll have one primary and the rest list of previous per chain
     * */
 
-  const lottoState = useCwLottoState(PRIMARY_RUNNING_LOTTERY);
-  const lottoConfig = useCwLottoConfig(PRIMARY_RUNNING_LOTTERY);
+  const gameState = useCwLottoState(PRIMARY_RUNNING_GAME);
+  const gameConfig = useCwLottoConfig(PRIMARY_RUNNING_GAME);
 
   return (
     <Container maxW="5xl" py={10}>
@@ -39,14 +35,12 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
 
-      {lottoState && lottoConfig &&
+      {gameState && gameConfig &&
               <Segment>
-                <GameStateCard contractAddress={PRIMARY_RUNNING_LOTTERY} gameState={lottoState} gameConfig={lottoConfig} showPlayButton={true}/>
+                <GameStateCard contractAddress={PRIMARY_RUNNING_GAME} gameState={gameState} gameConfig={gameConfig} showPlayButton={true}/>
               </Segment>
       }
 
     </Container>
   );
 }
-
-

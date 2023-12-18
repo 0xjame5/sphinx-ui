@@ -16,7 +16,7 @@ export default function ManagePage() {
   const [client, setClient] = useState<CwLottoClient | null>(null);
   const {address, getSigningCosmWasmClient} = useChain(chainName);
 
-  const lottoState = useCwLottoState(contractAddr);
+  const gameState = useCwLottoState(contractAddr);
 
   const [seedValue, setSeedValue] = useState<string | null>(null);
   const handleSeedChange = (event: ChangeEvent<HTMLInputElement>) => setSeedValue(event.target.value);
@@ -45,8 +45,8 @@ export default function ManagePage() {
     }
   };
 
-  if (lottoState) {
-    if ("CHOOSING" in lottoState) {
+  if (gameState?.lotteryState) {
+    if ("CHOOSING" in gameState.lotteryState) {
       adminComponent = <>
         <FormControl>
           <FormLabel>Seed For Random Lottery</FormLabel>
@@ -54,7 +54,7 @@ export default function ManagePage() {
         </FormControl>
         <Button onClick={handleButtonClick}>submit</Button>
       </>;
-    } else if ("OPEN" in lottoState) {
+    } else if ("OPEN" in gameState.lotteryState) {
       adminComponent = <div>still open</div>;
     } else { // CLOSED
       adminComponent = <div>closed</div>
@@ -67,7 +67,7 @@ export default function ManagePage() {
         <title>Sphinx | Manage</title>
       </Head>
       <div>
-        {lottoState && adminComponent}
+        {gameState && adminComponent}
       </div>
     </Container>
   );
