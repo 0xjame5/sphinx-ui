@@ -31,9 +31,9 @@ codegen({
     // messageComposer: {
     //   enabled: false
     // },
-    //useContractsHooks: {
-    //  enabled: true
-    //}
+    useContractsHooks: {
+      enabled: true
+    },
   }
 }).then(() => {
   console.log('✨ all done!');
