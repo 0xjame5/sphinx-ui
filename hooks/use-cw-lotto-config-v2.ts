@@ -21,11 +21,7 @@ export function useCwLottoConfigV2(contractAddress: string){
           // Handle error appropriately
         });
     }
-  }, [contractAddress, status, cwLotto]); //
-
-  // if (status == 'Connected' && cwLotto.cosmWasmClient) {
-  //   const getQueryClient = cwLotto.getQueryClient(contractAddress);
-  //   getQueryClient.config().then((configResp => setConfig(configResp.config)))
-  // }
+  }, [contractAddress, status, cwLotto]);
+  
   return config;
 }
