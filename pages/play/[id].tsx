@@ -68,8 +68,7 @@ export default function PlayPage() {
         <Grid.Column width={showSegment ? 12 : 16}>
           <Segment>
             {lottoState && lottoConfig && address &&
-                          <GameStateCard contractAddress={contractAddr} gameState={gameState} gameConfig={lottoConfig}
-                            showPlayButton={false}/>
+                <GameStateCard contractAddress={contractAddr} showPlayButton={false}/>
             }
           </Segment>
         </Grid.Column>
