@@ -5,7 +5,7 @@ import {useContracts} from "../codegen/contracts-context";
 
 
 export function useCwLottoTicketCountV2(contractAddress: string) {
-  const { address, chain: chainInfo} = useChain(chainName);
+  const { address} = useChain(chainName);
   const { cwLotto } = useContracts();
   const { status } = useChain(chainName);
   const [tickets, setBoughtTickets] = useState<number | null | undefined>(null);
