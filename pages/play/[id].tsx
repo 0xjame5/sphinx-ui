@@ -1,57 +1,30 @@
 import {useRouter} from 'next/router';
 import {Container} from "@chakra-ui/react";
 import Head from "next/head";
-
-
 import {Grid, Segment} from 'semantic-ui-react'
-
 import {useChain} from "@cosmos-kit/react";
-import {useCwLottoState} from "../../hooks/use-cw-lotto-state";
-import React, {useEffect, useState} from "react";
-import {CwLottoClient} from "../../codegen/CwLotto.client";
-import {useCwLottoConfig} from "../../hooks/use-cw-lotto-config";
+import React from "react";
 import {chainName} from "../../config";
 import {GameStateCard} from "../../components/react/lotto-state-card";
 import {TicketCard} from "../../components/react/ticket-card";
-import {useCwLottoTicketCount} from "../../hooks/use-cw-lotto-ticket-count";
 import {ClaimButton} from "../../components/forms/claim-button";
 import {BuyTicketsForm} from "../../components/forms/buy-tickets";
+import {ContractContextProvider} from "../ContractContextProvider";
+import {useCwLottoConfigV2} from "../../hooks/use-cw-lotto-config-v2";
+import {useCwLottoStateV2} from "../../hooks/use-cw-lotto-state-v2";
+import {useCwLottoTicketCountV2} from "../../hooks/use-cw-lotto-ticket-count-v2";
 
-export default function PlayPage() {
+const PlayPageLayout = () => {
   const router = useRouter();
   const {id} = router.query;
   const contractAddr = id as string;
+  const {address} = useChain(chainName);
 
-  const [signingClient, setSigningClient] = useState<CwLottoClient | null>(null);
-  const {address, getSigningCosmWasmClient, getRestEndpoint, getRpcEndpoint, chain} = useChain(chainName);
+  let lottoConfig = useCwLottoConfigV2(contractAddr);
+  let gameState = useCwLottoStateV2(contractAddr);
+  let ticketCount = useCwLottoTicketCountV2(contractAddr)
 
-  const gameState = useCwLottoState(contractAddr);
   const lottoState = gameState?.lotteryState;
-  const lottoConfig = useCwLottoConfig(contractAddr);
-  const ticketCount = useCwLottoTicketCount(contractAddr);
-
-  useEffect(() => {
-    getRpcEndpoint().then((resp => {
-      console.log(resp)
-    }));
-    getRestEndpoint().then((resp => {
-      console.log(resp)
-    }));
-  }, [address, getRestEndpoint, getRpcEndpoint]);
-
-  useEffect(() => {
-    if (!address) {
-      return
-    }
-    getSigningCosmWasmClient()
-      .then(signingCWClient => {
-        if (!signingCWClient || !address) {
-          console.error("cosmwasmClient undefined or address undefined.");
-          return;
-        }
-        setSigningClient(new CwLottoClient(signingCWClient, address, contractAddr));
-      });
-  }, [address, contractAddr, getSigningCosmWasmClient]);
 
   let showSegmentForOpen = lottoState && 'OPEN' in lottoState
   let showSegmentForClosed = lottoState && 'CLOSED' in lottoState && !lottoState.CLOSED.claimed && lottoState.CLOSED.winner === address
@@ -68,8 +41,7 @@ export default function PlayPage() {
         <Grid.Column width={showSegment ? 12 : 16}>
           <Segment>
             {lottoState && lottoConfig && address &&
-                          <GameStateCard contractAddress={contractAddr} gameState={gameState} gameConfig={lottoConfig}
-                            showPlayButton={false}/>
+                <GameStateCard contractAddress={contractAddr} showPlayButton={false}/>
             }
           </Segment>
         </Grid.Column>
@@ -81,8 +53,8 @@ export default function PlayPage() {
                   <Grid.Column width={4}><Segment>
                                         Lottery is open state.
                     {ticketCount && <TicketCard numTickets={ticketCount}/>}
-                    {signingClient && lottoConfig &&
-                                          <BuyTicketsForm cwLottoClient={signingClient} config={lottoConfig}/>}
+                    {lottoConfig &&
+                                          <BuyTicketsForm config={lottoConfig} contractAddr={contractAddr}/>}
                   </Segment></Grid.Column>
                 ) : address && 'CLOSED' in lottoState && !lottoState.CLOSED.claimed && lottoState.CLOSED.winner.toString() === address ? (
                   <Grid.Column width={4}><Segment>
@@ -98,8 +70,11 @@ export default function PlayPage() {
         }
       </Grid>
     </Container>
-  );
+  )
+};
+
+export default function PlayPage() {
+  return (<ContractContextProvider>
+    <PlayPageLayout/>
+  </ContractContextProvider>);
 }
-
-
-
