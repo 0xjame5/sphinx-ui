@@ -6,22 +6,13 @@
 
 import { CosmWasmClient, SigningCosmWasmClient } from "@cosmjs/cosmwasm-stargate";
 import { IQueryClientProvider, ISigningClientProvider, IMessageComposerProvider } from "./contractContextBase";
-import { HackCw20QueryClient } from "./HackCw20.client";
-import { HackCw20Client } from "./HackCw20.client";
-import { HackCw20 } from "./HackCw20.provider";
 import { CwLottoQueryClient } from "./CwLotto.client";
 import { CwLottoClient } from "./CwLotto.client";
 import { CwLotto } from "./CwLotto.provider";
 export interface IContractsContext {
-  hackCw20: IQueryClientProvider<HackCw20QueryClient> & ISigningClientProvider<HackCw20Client>;
   cwLotto: IQueryClientProvider<CwLottoQueryClient> & ISigningClientProvider<CwLottoClient>;
 }
 export const getProviders = (address?: string, cosmWasmClient?: CosmWasmClient, signingCosmWasmClient?: SigningCosmWasmClient) => ({
-  hackCw20: new HackCw20({
-    address,
-    cosmWasmClient,
-    signingCosmWasmClient
-  }),
   cwLotto: new CwLotto({
     address,
     cosmWasmClient,

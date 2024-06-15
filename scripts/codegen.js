@@ -4,10 +4,6 @@ const codegen = require('@cosmwasm/ts-codegen').default;
 const contractsDir = resolve(join(__dirname, '/../schemas'));
 const contracts = [
   {
-    name: 'HackCw20',
-    dir: join(contractsDir, 'cw20-base')
-  },
-  {
     name: 'CwLotto',
     dir: join(contractsDir, 'cw-lotto')
   },
