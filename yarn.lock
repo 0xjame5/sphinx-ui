@@ -3870,7 +3870,7 @@
     bowser "2.11.0"
     events "3.3.0"
 
-"@cosmos-kit/core@^0.27.13":
+"@cosmos-kit/core@^0.27.13", "@cosmos-kit/core@^0.27.15":
   version "0.27.15"
   resolved "https://registry.yarnpkg.com/@cosmos-kit/core/-/core-0.27.15.tgz#39271501b7e36c615e3de0c10c399c696e46dd88"
   integrity sha512-qXLfZC/7FF2jOtfrvk3Ygfc/AAaObReiJUydy0I1rlK90/Z/Gl0dWhzfFP8jh1+3o65b9b1lckMFxQzbnJEbfA==
@@ -3938,16 +3938,17 @@
     "@walletconnect/client" "1.8.0"
     react-icons "4.4.0"
 
-"@cosmos-kit/react@0.27.8":
-  version "0.27.8"
-  resolved "https://registry.yarnpkg.com/@cosmos-kit/react/-/react-0.27.8.tgz#f78c8891d39019251e3d2d1b3daf2168e530a0c0"
-  integrity sha512-hy/Nhk7dCK6ZBdzGHczzGBxGy3+Rdx0Q80FTiqr+J7LYem73ZMUKRVAqYbKvB8bUWU4Zj89E05PQZROaZwefsg==
+"@cosmos-kit/react@0.27.10":
+  version "0.27.10"
+  resolved "https://registry.yarnpkg.com/@cosmos-kit/react/-/react-0.27.10.tgz#66f9f95ca0bfc07fb879ffa61e350020a5a990fc"
+  integrity sha512-99EzQlqIUycl8lD2yhr2ektsTHQZZtqMw3o1jLfkkIm0doLVYXvssiiqJoTAeh9TT1A0hHLJxoOmQcNk9+BHNg==
   dependencies:
     "@babel/runtime" "7.11.2"
     "@chakra-ui/react" "2.4.3"
-    "@cosmos-kit/core" "^0.27.13"
+    "@cosmos-kit/core" "^0.27.15"
     "@emotion/react" "11.10.5"
     "@emotion/styled" "11.10.5"
+    "@walletconnect/types" "2.2.0"
     bowser "2.11.0"
     framer-motion "7.6.19"
     qrcode.react "3.1.0"
