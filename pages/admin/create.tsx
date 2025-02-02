@@ -1,24 +1,23 @@
+import { Button, Container, FormControl, FormLabel, Input, NumberInput, NumberInputField, VStack, } from "@chakra-ui/react";
 import Head from "next/head";
-import {Button, Container, FormControl, FormLabel, Input, NumberInput, NumberInputField, VStack,} from "@chakra-ui/react";
 
-import {useRouter} from 'next/router'
-import React, {ChangeEvent, useEffect, useState} from "react";
-import {useChain} from "@cosmos-kit/react";
-import {chainName} from "../../config";
-import {ContractContextProvider} from "../ContractContextProvider";
-import { Duration, InstantiateMsg, Coin } from "../../codegen/CwLotto.types";
 import { StdFee } from "@cosmjs/stargate";
+import { useChain } from "@cosmos-kit/react";
+import { useRouter } from 'next/router';
+import { ChangeEvent, useState } from "react";
+import { Coin, Duration, InstantiateMsg } from "../../codegen/CwLotto.types";
+import { chainName } from "../../config";
+import { ContractContextProvider } from "../ContractContextProvider";
 
-import { 
-  Modal, 
-  ModalOverlay, 
-  ModalContent, 
-  ModalHeader, 
-  ModalBody, 
+import {
+  Modal,
+  ModalBody,
   ModalCloseButton,
-  useToast,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
   Text,
-  useClipboard
+  useToast
 } from "@chakra-ui/react";
 
 const CreateLayout = () => {
