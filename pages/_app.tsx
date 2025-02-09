@@ -28,7 +28,7 @@ function CreateCosmosApp({Component, pageProps}: AppProps) {
       switch (chain.chain_name) {
       case 'junotestnet':
         return {
-          gasPrice: GasPrice.fromString('0.0025ujunox'),
+          gasPrice: GasPrice.fromString('0.025ujunox'),
         };
       }
     },
