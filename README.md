@@ -10,67 +10,79 @@ yarn && yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Contract Configuration
+
+To point the application to your lottery contract, you need to modify the configuration in `config/lottery.ts`:
+
+```typescript
+// config/lottery.ts
+export const FREEDOM_LIST: string[] = [
+  'your-contract-address-here',
+];
+
+export const PRIMARY_RUNNING_GAME = FREEDOM_LIST[0];
+```
+
+Replace `'your-contract-address-here'` with your deployed contract address. The `PRIMARY_RUNNING_GAME` constant is used throughout the application to reference the active lottery contract.
+
+You can also add multiple contract addresses to the `FREEDOM_LIST` array if you want to support multiple lotteries. The first address in the list will be used as the primary game.
+
+## Backend Contract
+
+The smart contract implementation for this lottery system can be found in the [cw-sphinx](https://github.com/0xjame5/cw-sphinx) repository. This repository contains the CosmWasm smart contract code that powers the lottery functionality.
+
+## Application Overview
+
+Sphinx UI is a lottery application built on the Cosmos blockchain. The application consists of two main user interfaces:
+
+1. **Player Interface** (`/`)
+   - Home page showing the current lottery state
+   - Requires wallet connection to interact
+   - Displays game state and play button when connected
+   - Players can view active lotteries and participate
+
+2. **Admin Interface** (`/admin`)
+   - Create new lottery contracts (`/admin/create`)
+   - Manage existing lotteries (`/admin/[id]`)
+   - Monitor lottery states and execute draws
+
+3. **Play Interface** (`/play/[id]`)
+   - Dedicated page for participating in specific lotteries
+   - Purchase tickets and view lottery details
+   - Claim winnings when applicable
+
+## User Flows
+
+### Player Flow
+1. Connect wallet on the home page
+2. View active lottery state
+3. Click play button to participate
+4. Purchase tickets using the specified token denomination
+5. Wait for lottery completion
+6. Claim winnings if selected as winner
+
+### Admin Flow
+1. Navigate to admin portal
+2. Create new lottery with parameters:
+   - Contract Owner address
+   - Ticket Cost Amount
+   - Token Denomination
+   - Duration
+   - House Fee
+3. Monitor lottery state
+4. Execute lottery draw when in CHOOSING state
+5. Track winner and claim status
+
+## Lottery Contract States
+
+The lottery contract operates in three states:
+
+1. **OPEN**: The lottery is accepting ticket purchases
+2. **CHOOSING**: The lottery is closed for purchases and waiting for admin to execute the draw
+3. **CLOSED**: The lottery has been executed and has a winner
+
+Players can:
+- Purchase tickets while the lottery is OPEN
+- Claim their winnings if they are the winner and the lottery is CLOSED
 
 ## Learn More 
-
-### Chain Registry
-
-The npm package for the Official Cosmos chain registry. Get chain and token data for you application.
-
-* https://github.com/cosmology-tech/chain-registry
-
-### Cosmology Videos
-
-Checkout more videos for how to use various frontend tooling in the Cosmos!
-
-* https://cosmology.tech/learn
-
-### Cosmos Kit
-
-A wallet connector for the Cosmos ⚛️
-
-* https://github.com/cosmology-tech/cosmos-kit
-
-### Telescope
-
-A "babel for the Cosmos", Telescope is a TypeScript Transpiler for Cosmos Protobufs. Telescope is used to generate libraries for Cosmos blockchains. Simply point to your protobuffer files and create developer-friendly Typescript libraries for teams to build on your blockchain.
-
-* https://github.com/osmosis-labs/telescope
-
-🎥 [Checkout the Telescope video playlist](https://www.youtube.com/watch?v=n82MsLe82mk&list=PL-lMkVv7GZwyQaK6bp6kMdOS5mzosxytC) to learn how to use `telescope`!
-
-### CosmWasm TS Codegen
-
-The quickest and easiest way to interact with CosmWasm Contracts. @cosmwasm/ts-codegen converts your CosmWasm smart contracts into dev-friendly TypeScript classes so you can focus on shipping code.
-
-* https://github.com/CosmWasm/ts-codegen
-
-🎥 [Checkout the CosmWasm/ts-codegne video playlist](https://www.youtube.com/watch?v=D_A5V2PfNLA&list=PL-lMkVv7GZwz1KO3jANwr5W4MoziruXwK) to learn how to use `ts-codegen`!
-
-
-## Learn More about Next.js
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-
-## Credits
-
-🛠 Built by Cosmology — if you like our tools, please consider delegating to [our validator ⚛️](https://cosmology.tech/validator)
-
-Code built with the help of these related projects:
-
-* [@cosmwasm/ts-codegen](https://github.com/CosmWasm/ts-codegen) for generated CosmWasm contract Typescript classes
-* [@osmonauts/telescope](https://github.com/osmosis-labs/telescope) a "babel for the Cosmos", Telescope is a TypeScript Transpiler for Cosmos Protobufs.
-* [chain-registry](https://github.com/cosmology-tech/chain-registry) Cosmos chain registry and chain info.
-* [cosmos-kit](https://github.com/cosmology-tech/cosmos-kit) A wallet connector for the Cosmos.
